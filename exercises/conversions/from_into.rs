@@ -1,8 +1,6 @@
 // The From trait is used for value-to-value conversions.
 // If From is implemented correctly for a type, the Into trait should work conversely.
 // You can read more about it at https://doc.rust-lang.org/std/convert/trait.From.html
-// Execute `rustlings hint from_into` or use the `hint` watch subcommand for a hint.
-
 #[derive(Debug)]
 struct Person {
     name: String,
@@ -35,10 +33,34 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.len() == 0 {
+            return Person::default()
+        }
+        let arr = s.split(',').collect::<Vec<&str>>();
+        if arr.len() == 1 {
+            return Person::default()
+        } else if arr.len() == 2 {
+            let name = if arr[0].is_empty() {
+                return Person::default();
+            } else {
+                arr[0].into()
+            };
+            let age = if arr[1].is_empty() {
+                return Person::default();
+            } else {
+                if let Ok(a) = arr[1].parse::<usize>() {
+                    a
+                } else {
+                    return Person::default();
+                }
+            };
+            return Person { name, age };
+        } else {
+            Person::default()
+        }
     }
 }
 
